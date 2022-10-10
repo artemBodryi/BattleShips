@@ -20,8 +20,8 @@ const model = {
    
     fire: function (guess) {
         for (let i = 0; i < this.numShips; i++) {
-            var ship = this.ships[i];
-            var index = ship.locations.indexOf(guess);
+            let ship = this.ships[i];
+            const index = ship.locations.indexOf(guess);
             
             //if ship was sunken, making notification for user and return true
             if (ship.hits[index] === "hit") {
@@ -45,7 +45,7 @@ const model = {
     },
 
     isSunk: function (ship) {
-        for (var i = 0; i < this.shipLength; i++) {
+        for (let i = 0; i < this.shipLength; i++) {
             if (ship.hits[i] !== 'hit') {
                 return false;
             }
@@ -54,8 +54,8 @@ const model = {
     },
 
     generateShipLocations: function () {
-        var locations;
-        for (var i = 0; i < this.numShips; i++) {
+        let locations;
+        for (let i = 0; i < this.numShips; i++) {
             do {
                 locations = this.generateShip();
             } while (this.collision(locations));
@@ -68,8 +68,8 @@ const model = {
     generateShip: function () {
         //generating 0 or 1. 
         //0 - vertical, 1 - horizontal
-        var direction = Math.floor(Math.random() * 2);
-        var row, col;
+        const direction = Math.floor(Math.random() * 2);
+        let row, col;
 
         if (direction === 1) { //horizontal
             row = Math.floor(Math.random() * this.boardSize);
@@ -79,8 +79,8 @@ const model = {
             col = Math.floor(Math.random() * this.boardSize);
         }
 
-        var newShipLocations = [];
-        for (var i = 0; i < this.shipLength; i++) {
+        let newShipLocations = [];
+        for (let i = 0; i < this.shipLength; i++) {
             if (direction === 1) {
                 newShipLocations.push(row + "" + (col + i));
             } else {
@@ -91,9 +91,9 @@ const model = {
     },
 
     collision: function (locations) {
-        for (var i = 0; i < this.numShips; i++) {
+        for (let i = 0; i < this.numShips; i++) {
             const ship = this.ships[i];
-            for (var j = 0; j < locations.length; j++) {
+            for (let j = 0; j < locations.length; j++) {
                 if (ship.locations.indexOf(locations[j]) >= 0) {
                     return true;
                 }
@@ -117,31 +117,31 @@ const model = {
 // model.fire('11');
 // model.fire('10');
 
-var view = {
+const view = {
     displayMessage: function (msg) {
-        var messageArea = document.getElementById('messageArea');
+        const messageArea = document.getElementById('messageArea');
         messageArea.innerHTML = msg;
     },
 
     displayHit: function (location) {
-        var cell = document.getElementById(location);
+        const cell = document.getElementById(location);
         cell.setAttribute('class', 'hit');
     },
 
     displayMiss: function (location) {
-        var cell = document.getElementById(location);
+        const cell = document.getElementById(location);
         cell.setAttribute('class', 'miss');
     }
 };
 
-var controller = {
+const controller = {
     guesses: 0,
     
     processGuess: function (guess) {
-        var location = parseGuess(guess);
+        const location = parseGuess(guess);
         if (location) {
             this.guesses++;
-            var hit = model.fire(location);
+            const hit = model.fire(location);
             if (hit && model.shipsSunk === model.numShips) {
                 view.displayMessage(`You sank all my battleships, in ${this.guesses} guesses.`);
             }
@@ -167,16 +167,14 @@ var controller = {
 // helpful function for users request
 
 function parseGuess(guess) {
-    var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    const alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
     if (guess === null || guess.length !== 2) {
         alert('Oops, please enter a letter and a number on the board');
     } else {
-        var firstChar = guess.charAt(0);
-        var row = alphabet.indexOf(firstChar);
-        // if we do not want create variable firstChar, we can write next:
-        //var row = alphabet.indexOf(guess.charAt(0));
-        var column = guess.charAt(1);
+        const firstChar = guess.charAt(0);
+        const row = alphabet.indexOf(firstChar);
+        const column = guess.charAt(1);
 
         if (isNaN(row) || isNaN(column)) {
             alert('Oops, that is not on the board.')
@@ -199,15 +197,15 @@ function parseGuess(guess) {
 // event handlers
 
 function handleFireButton() {
-    var guessInput = document.getElementById('guessInput');
-    var guess = guessInput.value.toUpperCase();
+    const guessInput = document.getElementById('guessInput');
+    const guess = guessInput.value.toUpperCase();
 
     controller.processGuess(guess);
     guessInput.value = '';
 }
 
 function handleKeyPress(e) {
-    var fireButton = document.getElementById('fireButton');
+    const fireButton = document.getElementById('fireButton');
 
     if (e.keyCode === 13) {
         fireButton.click();
@@ -220,11 +218,11 @@ function handleKeyPress(e) {
 
 function init() {
     // Fire! button onclick handler
-    var fireButton = document.getElementById('fireButton');
+    const fireButton = document.getElementById('fireButton');
     fireButton.onclick = handleFireButton;
 
     //handle "return" key press
-    var guessInput = document.getElementById('guessInput');
+    const guessInput = document.getElementById('guessInput');
     guessInput.onkeypress = handleKeyPress;
 
     // place the ships on the game board
